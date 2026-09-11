@@ -10,6 +10,7 @@
 --secondary-color: #0a659c;
 --accent-color: #d5a928;
 --wrong-color: #dc3545;
+--success-color: #168a66;
 --bg-color: #e8f0f5;
 --card-bg: #ffffff;
 }
@@ -27,6 +28,8 @@ margin: 0;
 padding: 12px;
 display: flex;
 justify-content: center;
+min-height: 100vh;
+overflow-x: hidden;
 }
 
 .container {
@@ -35,7 +38,8 @@ max-width: 800px;
 background: var(--card-bg);
 padding: 20px 16px;
 border-radius: 12px;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+box-shadow: 0 18px 45px rgba(6, 47, 84, 0.14), 0 4px 15px rgba(0, 0, 0, 0.06);
+animation: pageEnter .55s ease both;
 }
 
 .brand-header {
@@ -46,6 +50,19 @@ padding: 24px 20px 22px;
 border-radius: 12px 12px 0 0;
 position: relative;
 overflow: hidden;
+box-shadow: inset 0 -1px rgba(255,255,255,.18);
+}
+
+.brand-header::before {
+content: "";
+position: absolute;
+width: 220px;
+height: 220px;
+right: -80px;
+top: -130px;
+border: 1px solid rgba(255,255,255,.18);
+border-radius: 50%;
+box-shadow: 0 0 0 18px rgba(255,255,255,.04), 0 0 0 36px rgba(255,255,255,.03);
 }
 
 .brand-header::after {
@@ -75,6 +92,7 @@ color: #d9eef8;
 font-weight: 700;
 color: var(--primary-color);
 margin: 0 0 7px;
+font-size: .95rem;
 }
 
 .start-btn {
@@ -128,25 +146,19 @@ accent-color: var(--secondary-color);
 .selection-actions {
 display: flex;
 gap: 8px;
+flex-wrap: wrap;
 }
 
 .selection-actions button {
 font-size: 0.9rem;
 padding: 9px 12px;
-}
-
-.favorite-info {
-color: #765d00;
-background: #fff8dc;
-border: 1px solid #ead27a;
-border-radius: 8px;
-padding: 9px 11px;
-font-size: .9rem;
+width: auto;
+flex: 1 1 150px;
 }
 
 @media (min-width: 480px) {
 .control-panel {
-flex-direction: row;
+flex-direction: column;
 }
 }
 
@@ -176,8 +188,13 @@ color: white;
 border: none;
 cursor: pointer;
 font-weight: 500;
-transition: background-color 0.2s, opacity 0.2s;
+transition: background-color 0.2s, opacity 0.2s, transform 0.2s, box-shadow 0.2s;
 touch-action: manipulation;
+}
+
+button:hover:not(:disabled) {
+transform: translateY(-2px);
+box-shadow: 0 7px 14px rgba(6, 47, 84, .14);
 }
 
 button:active {
@@ -191,22 +208,55 @@ opacity: 0.6;
 }
 
 .stats-card {
-background-color: #e9ecef;
+background: linear-gradient(135deg, #f0f7fb, #e5eef4);
 padding: 12px 16px;
 border-radius: 8px;
 margin-bottom: 16px;
 display: flex;
-justify-content: space-between;
+flex-direction: column;
+gap: 9px;
 font-weight: bold;
 font-size: 0.95rem;
+border: 1px solid #d5e2eb;
+box-shadow: 0 4px 12px rgba(6, 47, 84, .06);
+}
+
+.stats-main {
+display: flex;
+justify-content: space-between;
+gap: 12px;
+}
+
+.progress-track {
+height: 8px;
+background: #d4e2ea;
+border-radius: 999px;
+overflow: hidden;
+}
+
+.progress-bar {
+height: 100%;
+width: 0%;
+border-radius: inherit;
+background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+transition: width .5s cubic-bezier(.22, 1, .36, 1);
 }
 
 .question-card {
-border: 1px solid #e0e0e0;
-border-radius: 8px;
+border: 1px solid #dbe5eb;
+border-radius: 12px;
 padding: 16px;
 margin-bottom: 16px;
 background-color: #fff;
+box-shadow: 0 7px 18px rgba(6, 47, 84, .06);
+}
+
+#quizArea > .question-card {
+will-change: transform, opacity;
+}
+
+.question-enter {
+animation: questionEnter .38s cubic-bezier(.22, 1, .36, 1) both;
 }
 
 .question-title {
@@ -215,6 +265,7 @@ font-weight: bold;
 margin-bottom: 16px;
 color: #1a1a1a;
 line-height: 1.5;
+letter-spacing: .01em;
 }
 
 .options-container {
@@ -225,7 +276,7 @@ gap: 10px;
 
 .option-btn {
 text-align: left;
-background-color: #f8f9fa;
+background: linear-gradient(135deg, #ffffff, #f5f8fa);
 color: #333;
 border: 1px solid #ced4da;
 padding: 14px 15px;
@@ -235,19 +286,33 @@ font-size: 0.95rem;
 line-height: 1.4;
 white-space: normal;
 word-break: break-word;
+transition: transform .2s, box-shadow .2s, border-color .2s, background .2s;
+animation: optionEnter .35s ease both;
+}
+
+.option-btn:nth-child(2) { animation-delay: .035s; }
+.option-btn:nth-child(3) { animation-delay: .07s; }
+.option-btn:nth-child(4) { animation-delay: .105s; }
+.option-btn:hover:not(:disabled) {
+border-color: var(--secondary-color);
+background: #eef8fc;
+transform: translateX(4px);
+box-shadow: 0 5px 12px rgba(10, 101, 156, .12);
 }
 
 .option-btn.correct {
-background-color: #d4edda !important;
+background: linear-gradient(135deg, #dff7e9, #c8eedb) !important;
 border-color: #c3e6cb !important;
 color: #155724 !important;
 font-weight: bold;
+animation: correctPop .42s cubic-bezier(.22, 1, .36, 1) both;
 }
 
 .option-btn.wrong {
-background-color: #f8d7da !important;
+background: linear-gradient(135deg, #ffe5e8, #f8d7da) !important;
 border-color: #f5c6cb !important;
 color: #721c24 !important;
+animation: wrongFlash .42s ease both;
 }
 
 .result-feedback {
@@ -258,6 +323,7 @@ font-weight: bold;
 font-size: 0.95rem;
 display: none;
 line-height: 1.4;
+animation: feedbackEnter .35s ease both;
 }
 
 .result-feedback.correct {
@@ -268,6 +334,150 @@ color: #155724;
 .result-feedback.wrong {
 background-color: #f8d7da;
 color: #721c24;
+}
+
+.custom-answer-actions {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
+margin-top: 10px;
+padding-top: 10px;
+border-top: 1px solid rgba(22, 138, 102, .18);
+}
+
+.custom-answer-actions button {
+width: auto;
+flex: 1 1 180px;
+padding: 9px 12px;
+font-size: .9rem;
+}
+
+.custom-answer-actions .remove-answer-btn {
+background: #168a66;
+}
+
+.custom-answer-actions .keep-answer-btn {
+background: #5c7280;
+}
+
+/* 錯題庫提示改為不佔版面的隱藏容器，避免管理區下方出現空白紅色區域 */
+#customSetNotice,
+#customResultNotice {
+display: none !important;
+}
+
+.result-feedback.correct {
+border-left: 4px solid var(--success-color);
+}
+
+#resultArea.result-enter {
+animation: resultEnter .55s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+#celebrationLayer {
+position: fixed;
+inset: 0;
+pointer-events: none;
+overflow: hidden;
+z-index: 20;
+}
+
+.confetti {
+position: absolute;
+top: -18px;
+width: 9px;
+height: 15px;
+border-radius: 2px;
+animation: confettiFall 1.25s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+#toast {
+position: fixed;
+left: 50%;
+bottom: 24px;
+transform: translate(-50%, 18px);
+opacity: 0;
+z-index: 30;
+padding: 10px 16px;
+border-radius: 999px;
+background: rgba(6, 47, 84, .94);
+color: #fff;
+font-size: .92rem;
+font-weight: 700;
+box-shadow: 0 8px 24px rgba(6, 47, 84, .24);
+pointer-events: none;
+}
+
+#toast.toast-show {
+animation: toastInOut 1.55s ease both;
+}
+
+.answer-shake {
+animation: answerShake .42s ease both;
+}
+
+@keyframes pageEnter {
+from { opacity: 0; transform: translateY(12px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes questionEnter {
+from { opacity: 0; transform: translateY(12px) scale(.985); }
+to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes optionEnter {
+from { opacity: 0; transform: translateX(-8px); }
+to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes correctPop {
+0% { transform: scale(.98); }
+55% { transform: scale(1.025); }
+100% { transform: scale(1); }
+}
+
+@keyframes wrongFlash {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-5px); }
+75% { transform: translateX(5px); }
+}
+
+@keyframes answerShake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-6px); }
+50% { transform: translateX(6px); }
+75% { transform: translateX(-3px); }
+}
+
+@keyframes feedbackEnter {
+from { opacity: 0; transform: translateY(7px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes resultEnter {
+from { opacity: 0; transform: translateY(18px) scale(.98); }
+to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes confettiFall {
+0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+100% { opacity: 0; transform: translate3d(var(--drift), 92vh, 0) rotate(720deg); }
+}
+
+@keyframes toastInOut {
+0% { opacity: 0; transform: translate(-50%, 18px); }
+15%, 78% { opacity: 1; transform: translate(-50%, 0); }
+100% { opacity: 0; transform: translate(-50%, 8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+animation-duration: .01ms !important;
+animation-iteration-count: 1 !important;
+scroll-behavior: auto !important;
+transition-duration: .01ms !important;
+}
 }
 
 .nav-actions {
@@ -282,6 +492,9 @@ flex: 1;
 </head>
 <body>
 
+<div id="celebrationLayer" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
 <div class="container">
 <div class="brand-header">
 <h1>海巡法規與勤務線上測驗</h1>
@@ -295,7 +508,6 @@ flex: 1;
 <div class="selection-actions">
 <button onclick="selectAllBanks()">全選題庫</button>
 <button onclick="clearBankSelection()">清除選擇</button>
-<button onclick="startFavoriteQuiz()">收藏題庫（<span id="favoriteCount">0</span>）</button>
 </div>
 <button onclick="shuffleAndReset()">🔀 隨機抽題</button>
 <button class="start-btn" onclick="beginSelectedQuiz()">⚓ 開始作答</button>
@@ -304,8 +516,11 @@ flex: 1;
 
 <div id="quizArea" style="display:none;">
 <div class="stats-card">
+<div class="stats-main">
 <span id="progressText">進度：0 / 0</span>
 <span id="scoreText">得分：0</span>
+</div>
+<div class="progress-track" aria-label="答題進度"><div id="progressBar" class="progress-bar"></div></div>
 </div>
 
 <div class="question-card">
@@ -325,11 +540,8 @@ flex: 1;
 <div id="resultSummary" class="result-feedback correct" style="display:block;"></div>
 <div class="nav-actions">
 <button id="retryWrongBtn" onclick="retryWrongQuestions()">錯題再作答一次</button>
-<button id="favoriteWrongBtn" onclick="favoriteWrongQuestions()">收藏本次錯題</button>
-<button onclick="startFavoriteQuiz()">複習我的題庫</button>
 <button onclick="returnToQuizSelection()">重新選擇題庫</button>
 </div>
-<button id="clearFavoriteBtn" onclick="clearFavoriteQuestions()" style="margin-top:10px;background:#8b2635;">清空我的題庫</button>
 </div>
 </div>
 
@@ -620,74 +832,15 @@ let score = 0;
 let userAnswers = {};
 let wrongQuestions = [];
 let quizMode = "normal";
-const FAVORITE_STORAGE_KEY = "coastGuardFavoriteQuestions";
-
-function getFavoriteQuestions() {
-try {
-return JSON.parse(localStorage.getItem(FAVORITE_STORAGE_KEY) || "[]");
-} catch (error) {
-return [];
-}
-}
-
-function saveFavoriteQuestions(questions) {
-localStorage.setItem(FAVORITE_STORAGE_KEY, JSON.stringify(questions));
-updateFavoriteCount();
-}
-
-function updateFavoriteCount() {
-const count = document.getElementById("favoriteCount");
-if (count) count.textContent = getFavoriteQuestions().length;
-}
-
-function favoriteWrongQuestions() {
-if (!wrongQuestions.length) {
-alert("目前沒有錯題可以收藏。");
-return;
-}
-const favorites = getFavoriteQuestions();
-const existingIds = new Set(favorites.map(question => question.id));
-const newQuestions = wrongQuestions.filter(question => !existingIds.has(question.id));
-saveFavoriteQuestions([...favorites, ...newQuestions]);
-document.getElementById("resultSummary").textContent += ` 已收藏 ${newQuestions.length} 題，收藏題庫目前共 ${getFavoriteQuestions().length} 題。`;
-document.getElementById("favoriteWrongBtn").disabled = true;
-document.getElementById("favoriteWrongBtn").textContent = "本次錯題已收藏";
-}
-
-function startFavoriteQuiz() {
-const favorites = getFavoriteQuestions();
-if (!favorites.length) {
-alert("我的題庫目前沒有題目，請先在測驗結果頁收藏錯題。");
-return;
-}
-currentQuestions = [...favorites];
-currentIndex = 0;
-score = 0;
-userAnswers = {};
-wrongQuestions = [];
-quizMode = "favorite";
-document.getElementById("selectionArea").style.display = "none";
-document.getElementById("quizArea").style.display = "block";
-document.getElementById("resultArea").style.display = "none";
-renderQuestion();
-}
-
 function beginSelectedQuiz() {
 startSelectedBanks();
 if (!currentQuestions.length) {
-alert("請至少選擇一個題庫，再開始作答。");
+showToast("請至少選擇一個題庫，再開始作答。");
 return;
 }
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function clearFavoriteQuestions() {
-if (!getFavoriteQuestions().length) return;
-if (!confirm("確定要清空我的題庫嗎？此操作無法復原。")) return;
-localStorage.removeItem(FAVORITE_STORAGE_KEY);
-updateFavoriteCount();
 }
 
 // 初始化題庫選擇器
@@ -708,7 +861,6 @@ label.appendChild(document.createTextNode(questionBank[key].name));
 picker.appendChild(label);
 }
 startSelectedBanks();
-updateFavoriteCount();
 }
 
 function updateSelectedBanks() {
@@ -755,6 +907,36 @@ document.getElementById("quizArea").style.display = "block";
 renderQuestion();
 }
 
+let toastTimer;
+
+function showToast(message) {
+const toast = document.getElementById("toast");
+if (!toast) return;
+toast.textContent = message;
+toast.className = "";
+void toast.offsetWidth;
+toast.className = "toast-show";
+clearTimeout(toastTimer);
+toastTimer = setTimeout(() => { toast.className = ""; }, 1700);
+}
+
+function celebrateCorrect() {
+const layer = document.getElementById("celebrationLayer");
+if (!layer) return;
+const colors = ["#d5a928", "#0a659c", "#168a66", "#e56b6f", "#062f54"];
+layer.innerHTML = "";
+for (let i = 0; i < 26; i++) {
+const piece = document.createElement("span");
+piece.className = "confetti";
+piece.style.left = `${Math.random() * 100}%`;
+piece.style.backgroundColor = colors[i % colors.length];
+piece.style.setProperty("--drift", `${Math.round((Math.random() - 0.5) * 180)}px`);
+piece.style.animationDelay = `${Math.random() * 0.18}s`;
+layer.appendChild(piece);
+}
+setTimeout(() => { layer.innerHTML = ""; }, 1600);
+}
+
 // 渲染當前題目
 function renderQuestion() {
 if (!currentQuestions || currentQuestions.length === 0) {
@@ -762,12 +944,22 @@ document.getElementById("questionTitle").textContent = "此題庫暫無題目。
 document.getElementById("optionsContainer").innerHTML = "";
 document.getElementById("progressText").textContent = "進度：0 / 0";
 document.getElementById("scoreText").textContent = "得分：0";
+const emptyProgress = document.getElementById("progressBar");
+if (emptyProgress) emptyProgress.style.width = "0%";
 return;
 }
 
 const q = currentQuestions[currentIndex];
 document.getElementById("progressText").textContent = `進度：${currentIndex + 1} / ${currentQuestions.length}`;
 document.getElementById("scoreText").textContent = `得分：${score}`;
+const progressBar = document.getElementById("progressBar");
+if (progressBar) progressBar.style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
+const questionPanel = document.querySelector("#quizArea > .question-card");
+if (questionPanel) {
+questionPanel.classList.remove("question-enter");
+void questionPanel.offsetWidth;
+questionPanel.classList.add("question-enter");
+}
 document.getElementById("questionTitle").textContent = `${currentIndex + 1}. ${q.question}${q.type === "multiple" ? "（複選）" : ""}`;
 
 const optionsContainer = document.getElementById("optionsContainer");
@@ -805,11 +997,29 @@ optionsContainer.appendChild(btn);
 if (hasAnswered) {
 const selectedIdx = userAnswers[currentIndex];
 const correctIdx = q.answer[0];
-feedback.style.display = "block";
 if (selectedIdx === correctIdx) {
-feedback.textContent = "恭喜答對！";
+if (quizMode === "custom") {
+feedback.style.display = "block";
 feedback.classList.add("correct");
+const actions = document.createElement("div");
+actions.className = "custom-answer-actions";
+const removeBtn = document.createElement("button");
+removeBtn.className = "remove-answer-btn";
+removeBtn.type = "button";
+removeBtn.textContent = "✓ 已學會，從錯題庫刪除";
+removeBtn.onclick = () => window.removeCurrentCustomQuestion();
+const keepBtn = document.createElement("button");
+keepBtn.className = "keep-answer-btn";
+keepBtn.type = "button";
+keepBtn.textContent = "保留本題，之後繼續複習";
+keepBtn.onclick = () => window.keepCurrentCustomQuestion();
+actions.append(removeBtn, keepBtn);
+feedback.appendChild(actions);
 } else {
+feedback.style.display = "none";
+}
+} else {
+feedback.style.display = "block";
 feedback.textContent = `答錯了！正確答案是：(${String.fromCharCode(65 + correctIdx)}) ${q.options[correctIdx]}`;
 feedback.classList.add("wrong");
 }
@@ -832,28 +1042,44 @@ score += 5; // 每題 5 分
 }
 
 renderQuestion();
+const questionPanel = document.querySelector("#quizArea > .question-card");
+if (selectedIdx === correctIdx) {
+celebrateCorrect();
+if (navigator.vibrate) navigator.vibrate(55);
+} else {
+if (questionPanel) {
+questionPanel.classList.remove("answer-shake");
+void questionPanel.offsetWidth;
+questionPanel.classList.add("answer-shake");
+}
+if (navigator.vibrate) navigator.vibrate([60, 35, 60]);
+}
 }
 
 // 完成測驗並整理錯題
 function finishQuiz() {
 if (!currentQuestions.length) {
-alert("請至少選擇一個題庫。");
+showToast("請至少選擇一個題庫。");
 return;
 }
 if (Object.keys(userAnswers).length < currentQuestions.length) {
-alert("還有題目尚未作答，請先完成所有題目。");
+showToast("還有題目尚未作答，請先完成所有題目。");
 return;
 }
 wrongQuestions = currentQuestions.filter((q, index) => userAnswers[index] !== q.answer[0]);
 const total = currentQuestions.length * 5;
-document.getElementById("resultTitle").textContent = quizMode === "wrong" ? "錯題重做完成" : (quizMode === "favorite" ? "我的題庫複習完成" : "測驗完成");
+document.getElementById("resultTitle").textContent = quizMode === "wrong" ? "錯題重做完成" : (quizMode === "custom" ? "我的錯題庫練習完成" : "測驗完成");
 document.getElementById("resultSummary").textContent = `本次答對 ${currentQuestions.length - wrongQuestions.length} / ${currentQuestions.length} 題，得分：${score} / ${total}。`;
 document.getElementById("retryWrongBtn").style.display = wrongQuestions.length ? "block" : "none";
-document.getElementById("favoriteWrongBtn").style.display = wrongQuestions.length ? "block" : "none";
-document.getElementById("favoriteWrongBtn").disabled = false;
-document.getElementById("favoriteWrongBtn").textContent = "收藏本次錯題";
 document.getElementById("quizArea").style.display = "none";
 document.getElementById("resultArea").style.display = "block";
+const resultArea = document.getElementById("resultArea");
+resultArea.classList.remove("result-enter");
+void resultArea.offsetWidth;
+resultArea.classList.add("result-enter");
+if (!wrongQuestions.length) {
+celebrateCorrect();
+}
 window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -899,5 +1125,128 @@ initSelect();
 }
 </script>
 
+
+<script>
+(function () {
+  var storageKey = 'coastGuardCustomMistakeSets';
+  var customSets = readSets();
+  var selectedSetId = '';
+
+  function readSets() {
+    try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (e) { return []; }
+  }
+  function saveSets() {
+    localStorage.setItem(storageKey, JSON.stringify(customSets));
+    renderControls();
+  }
+  function getSet() { return customSets.find(function (set) { return set.id === selectedSetId; }); }
+  function questionById(id) {
+    for (var key in questionBank) {
+      var found = questionBank[key].questions.find(function (question) { return question.id === id; });
+      if (found) return found;
+    }
+    return null;
+  }
+  function setOptions() {
+    var html = '<option value="">選擇自己的錯題庫</option>';
+    customSets.forEach(function (set) {
+      html += '<option value="' + set.id + '"' + (set.id === selectedSetId ? ' selected' : '') + '>' + set.name + '（' + set.questionIds.length + ' 題）</option>';
+    });
+    return html;
+  }
+  function renderControls() {
+    var selectHtml = customSets.length ? '<select id="customSetSelect" onchange="window.selectCustomMistakeSet(this.value)">' + setOptions() + '</select><button onclick="window.practiceCustomMistakeSet()">練習此錯題庫</button><button style="background:#8b2635" onclick="window.deleteCustomMistakeSet()">刪除錯題庫</button>' : '<span style="color:#64748b">尚未建立錯題庫</span>';
+    var panel = document.getElementById('customMistakePanel');
+    if (panel) panel.querySelector('.custom-controls').innerHTML = selectHtml;
+    var result = document.getElementById('customResultControls');
+    if (result) result.innerHTML = customSets.length ? '<select id="customResultSetSelect" onchange="window.selectCustomMistakeSet(this.value)">' + setOptions() + '</select><button onclick="window.addWrongToCustomSet()">加入錯題庫</button>' : '<span style="color:#64748b">請先建立錯題庫</span>';
+  }
+  function createSet(inputId, noticeId) {
+    var input = document.getElementById(inputId);
+    var name = (input.value || '').trim();
+    if (!name) { document.getElementById(noticeId).textContent = '請先輸入錯題庫名稱。'; return; }
+    var set = { id: 'custom_' + Date.now(), name: name, questionIds: [] };
+    customSets.push(set); selectedSetId = set.id; input.value = ''; saveSets();
+    document.getElementById(noticeId).textContent = '已建立「' + name + '」錯題庫。';
+  }
+  window.selectCustomMistakeSet = function (id) { selectedSetId = id; renderControls(); };
+  window.keepCurrentCustomQuestion = function () {
+    var actions = document.querySelector('.custom-answer-actions');
+    if (actions) {
+      actions.innerHTML = '<span style="color:#168a66;font-weight:700">已保留本題，之後仍可繼續複習。</span>';
+    }
+    if (typeof showToast === 'function') showToast('已保留本題');
+  };
+  window.removeCurrentCustomQuestion = function () {
+    if (typeof quizMode === 'undefined' || quizMode !== 'custom') return;
+    var question = currentQuestions[currentIndex];
+    var set = getSet();
+    if (!question || !set) return;
+    set.questionIds = set.questionIds.filter(function (id) { return id !== question.id; });
+    saveSets();
+    var oldAnswers = userAnswers;
+    var nextAnswers = {};
+    Object.keys(oldAnswers).forEach(function (key) {
+      var index = Number(key);
+      if (index < currentIndex) nextAnswers[index] = oldAnswers[key];
+      if (index > currentIndex) nextAnswers[index - 1] = oldAnswers[key];
+    });
+    userAnswers = nextAnswers;
+    score = Math.max(0, score - 5);
+    currentQuestions.splice(currentIndex, 1);
+    if (typeof showToast === 'function') showToast('已從錯題庫移除，做得很好！');
+    if (!currentQuestions.length) {
+      document.getElementById('quizArea').style.display = 'none';
+      document.getElementById('selectionArea').style.display = 'block';
+      renderControls();
+      return;
+    }
+    if (currentIndex >= currentQuestions.length) currentIndex = currentQuestions.length - 1;
+    renderQuestion();
+  };
+  window.createCustomMistakeSet = function () { createSet('customSetName', 'customSetNotice'); };
+  window.createCustomSetFromResult = function () { createSet('customResultSetName', 'customResultNotice'); };
+  window.deleteCustomMistakeSet = function () {
+    var set = getSet(); if (!set) return;
+    if (!confirm('確定刪除「' + set.name + '」嗎？')) return;
+    customSets = customSets.filter(function (item) { return item.id !== set.id; }); selectedSetId = ''; saveSets();
+  };
+  window.addWrongToCustomSet = function () {
+    var select = document.getElementById('customResultSetSelect'); if (select) selectedSetId = select.value;
+    var set = getSet();
+    if (!set) { document.getElementById('customResultNotice').textContent = '請先選擇要收錄的錯題庫。'; return; }
+    var ids = new Set(set.questionIds);
+    wrongQuestions.forEach(function (question) { ids.add(question.id); });
+    set.questionIds = Array.from(ids); saveSets();
+    document.getElementById('customResultNotice').textContent = '已將 ' + wrongQuestions.length + ' 題加入「' + set.name + '」。';
+  };
+  window.practiceCustomMistakeSet = function () {
+    var set = getSet();
+    if (!set) { document.getElementById('customSetNotice').textContent = '請先選擇自己的錯題庫。'; return; }
+    var qs = set.questionIds.map(questionById).filter(Boolean);
+    if (!qs.length) { document.getElementById('customSetNotice').textContent = '這個錯題庫目前沒有題目。'; return; }
+    currentQuestions = qs; currentIndex = 0; score = 0; userAnswers = {}; quizMode = 'custom';
+    document.getElementById('selectionArea').style.display = 'none'; document.getElementById('resultArea').style.display = 'none'; document.getElementById('quizArea').style.display = 'block'; renderQuestion();
+  };
+  function addPanels() {
+    var selection = document.getElementById('selectionArea');
+    if (selection && !document.getElementById('customMistakePanel')) {
+      var panel = document.createElement('div'); panel.id = 'customMistakePanel'; panel.className = 'question-card'; panel.style.marginTop = '18px';
+      panel.innerHTML = '<div class="question-title">我的錯題庫（免登入，保存在本機瀏覽器）</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="customSetName" placeholder="例如：海巡勤務錯題" style="flex:1;min-width:210px;padding:11px;border:1px solid #ccd5dc;border-radius:8px"><button onclick="window.createCustomMistakeSet()">＋新增錯題庫</button></div><div class="custom-controls" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div id="customSetNotice" class="result-feedback wrong" style="display:block;min-height:0"></div>';
+      selection.appendChild(panel);
+    }
+    var result = document.getElementById('resultArea');
+    if (result && !document.getElementById('customResultPanel')) {
+      var box = document.createElement('div'); box.id = 'customResultPanel'; box.className = 'question-card'; box.style.marginTop = '14px';
+      box.innerHTML = '<div class="question-title">將本次錯題加入自己的錯題庫</div><div id="customResultControls" style="display:flex;gap:8px;flex-wrap:wrap"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input id="customResultSetName" placeholder="輸入新錯題庫名稱" style="flex:1;min-width:210px;padding:11px;border:1px solid #ccd5dc;border-radius:8px"><button onclick="window.createCustomSetFromResult()">新增錯題庫</button></div><div id="customResultNotice" class="result-feedback correct" style="display:block;min-height:0"></div>';
+      result.insertBefore(box, result.firstChild);
+    }
+    renderControls();
+  }
+  var oldFinish = window.finishQuiz;
+  window.finishQuiz = function () { oldFinish(); addPanels(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addPanels); else addPanels();
+})();
+</script>
 </body>
 </html>
