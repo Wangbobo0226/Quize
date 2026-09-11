@@ -1232,7 +1232,7 @@ initSelect();
     var selection = document.getElementById('selectionArea');
     if (selection && !document.getElementById('customMistakePanel')) {
       var panel = document.createElement('div'); panel.id = 'customMistakePanel'; panel.className = 'question-card'; panel.style.marginTop = '18px';
-      panel.innerHTML = '<div class="question-title">我的錯題庫（所有人共用，可新增或刪除題目）</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="customSetName" placeholder="例如：海巡勤務錯題" style="flex:1;min-width:210px;padding:11px;border:1px solid #ccd5dc;border-radius:8px"><button onclick="window.createCustomMistakeSet()">＋新增錯題庫</button></div><div class="custom-controls" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div id="customSetNotice" class="result-feedback wrong" style="display:block;min-height:0"></div>';
+      panel.innerHTML = '<div class="question-title">我的錯題庫</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="customSetName" placeholder="例如：海巡勤務錯題" style="flex:1;min-width:210px;padding:11px;border:1px solid #ccd5dc;border-radius:8px"><button onclick="window.createCustomMistakeSet()">＋新增錯題庫</button></div><div class="custom-controls" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div><div id="customSetNotice" class="result-feedback wrong" style="display:block;min-height:0"></div>';
       selection.appendChild(panel);
     }
     var result = document.getElementById('resultArea');
