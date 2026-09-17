@@ -511,6 +511,67 @@ transition-duration: .01ms !important;
 }
 }
 
+.bank-menu-toggle {
+background: linear-gradient(135deg, #0a659c, #062f54);
+font-weight: 700;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 9px;
+margin-bottom: 10px;
+}
+.hamburger-icon {
+display: inline-flex;
+flex-direction: column;
+gap: 4px;
+width: 20px;
+}
+.hamburger-icon span {
+display: block;
+height: 2px;
+width: 20px;
+background: #fff;
+border-radius: 2px;
+}
+.bank-picker-menu {
+display: none;
+padding: 10px;
+border: 1px solid #c9dce8;
+border-radius: 10px;
+background: linear-gradient(180deg, #f7fbfd, #eef5f8);
+animation: questionEnter .25s ease both;
+}
+.bank-picker-menu.open { display: block; }
+.bank-menu-hint {
+margin: 0 0 8px;
+font-size: .86rem;
+color: #526b79;
+}
+.drone-random-controls {
+display: none;
+margin: 10px 0 0;
+padding: 12px;
+border: 1px solid #e2c86b;
+border-radius: 9px;
+background: #fffaf0;
+}
+.drone-random-controls.visible { display: block; }
+.drone-random-row {
+display: flex;
+align-items: center;
+gap: 10px;
+flex-wrap: wrap;
+}
+.drone-random-row label { font-weight: 700; color: var(--primary-color); }
+.drone-random-row input {
+width: 92px;
+padding: 10px;
+border: 1px solid #c8b878;
+border-radius: 7px;
+font-size: 1rem;
+}
+.drone-random-note { margin-top: 6px; font-size: .82rem; color: #6c5a25; }
+
 .nav-actions {
 display: flex;
 gap: 10px;
@@ -519,6 +580,238 @@ gap: 10px;
 .nav-actions button {
 flex: 1;
 }
+
+/* 行動版一般網站介面優化 */
+:root {
+  --primary-color: #083b63;
+  --secondary-color: #0b6f9f;
+  --accent-color: #d6a719;
+  --soft-blue: #eef6fa;
+  --line-blue: #d7e5ed;
+}
+body {
+  padding: 0;
+  background: #eef3f6;
+}
+.container {
+  max-width: 920px;
+  min-height: 100vh;
+  padding: 0 24px 36px;
+  border-radius: 0;
+  box-shadow: 0 0 28px rgba(6, 47, 84, .08);
+}
+.brand-header {
+  margin: 0 -24px 28px;
+  padding: 42px 32px 34px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(135deg, #06345b 0%, #0879a9 100%);
+}
+.brand-header h1 {
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
+  letter-spacing: .03em;
+}
+.brand-subtitle {
+  max-width: 620px;
+  line-height: 1.6;
+  font-size: .95rem;
+}
+.control-panel {
+  gap: 14px;
+}
+.section-label {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+  letter-spacing: .02em;
+}
+.bank-menu-toggle {
+  position: relative;
+  min-height: 58px;
+  margin: 0;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  box-shadow: 0 5px 14px rgba(6, 47, 84, .16);
+}
+.bank-menu-toggle[aria-expanded="true"] {
+  border-radius: 12px 12px 0 0;
+  margin-bottom: -14px;
+}
+.hamburger-icon {
+  flex: 0 0 24px;
+  width: 24px;
+  gap: 5px;
+}
+.hamburger-icon span { width: 24px; height: 3px; }
+.bank-picker-menu {
+  padding: 16px;
+  border: 1px solid var(--line-blue);
+  border-radius: 0 0 12px 12px;
+  background: #f8fbfc;
+  box-shadow: 0 8px 20px rgba(6, 47, 84, .1);
+}
+.bank-menu-hint {
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+.bank-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.bank-category {
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line-blue);
+  border-radius: 10px;
+  background: #fff;
+}
+.bank-category-header {
+  align-items: flex-start;
+  line-height: 1.45;
+}
+.bank-category-header strong { flex: 1; }
+.category-select-btn {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 7px 10px;
+  font-size: .82rem;
+  white-space: nowrap;
+}
+.bank-category-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 4px 8px;
+}
+.bank-option {
+  min-height: 42px;
+  padding: 9px 8px;
+  border-radius: 7px;
+  line-height: 1.35;
+}
+.bank-option:hover { background: var(--soft-blue); }
+.bank-option input { flex: 0 0 auto; width: 18px; height: 18px; }
+.selection-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 2px;
+}
+.selection-actions button {
+  min-height: 48px;
+  padding: 10px 12px;
+  font-size: .93rem;
+}
+.selection-actions button:last-child { grid-column: 1 / -1; }
+.control-panel > button:not(.bank-menu-toggle):not(.start-btn) {
+  min-height: 52px;
+}
+.start-btn {
+  min-height: 58px;
+  font-size: 1.12rem;
+  border-radius: 12px;
+}
+.drone-random-controls {
+  margin: 0;
+  border-radius: 10px;
+}
+.drone-random-row { justify-content: space-between; }
+.drone-random-row input { width: 88px; text-align: center; }
+.question-card { border-radius: 12px; }
+
+@media (max-width: 560px) {
+  .container { padding: 0 16px 28px; }
+  .brand-header { margin: 0 -16px 22px; padding: 32px 22px 28px; }
+  .brand-header h1 { line-height: 1.35; }
+  .brand-subtitle { font-size: .86rem; }
+  .bank-picker-menu { padding: 12px; }
+  .bank-category { padding: 12px; }
+  .bank-category-header { flex-direction: column; }
+  .category-select-btn { align-self: flex-start; }
+  .bank-category-options { display: flex; flex-direction: column; gap: 2px; }
+  .selection-actions { gap: 8px; }
+  .selection-actions button { font-size: .88rem; }
+}
+
+
+/* 簡潔介面與深色模式 */
+.brand-topline { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.brand-mark { font-size:1.35rem; color:rgba(255,255,255,.86); }
+.theme-toggle { width:auto; min-height:38px; padding:8px 12px; border:1px solid rgba(255,255,255,.32); border-radius:999px; background:rgba(0,0,0,.16); color:#fff; font-size:.82rem; }
+.theme-toggle:hover:not(:disabled) { transform:none; box-shadow:none; background:rgba(0,0,0,.28); }
+.selection-summary { padding:10px 12px; border:1px solid var(--line-blue); border-radius:8px; background:var(--soft-blue); color:var(--primary-color); font-size:.9rem; text-align:center; }
+.quiz-action-panel { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-action-panel[hidden] { display:none; }
+.quiz-action-panel button { min-height:50px; }
+.random-btn { background:#397286; }
+.start-btn { margin:0; }
+.control-panel { gap:12px; }
+.selection-actions { margin-top:0; }
+.bank-menu-toggle { min-height:52px; }
+.bank-picker-menu { margin-top:-4px; }
+
+html[data-theme="dark"] {
+  --primary-color:#d8eaf7; --secondary-color:#4ca6d5; --accent-color:#e4bb43;
+  --bg-color:#101820; --card-bg:#192630; --soft-blue:#223945; --line-blue:#36515f;
+}
+html[data-theme="dark"] body { background:#0f171d; color:#e7eef2; }
+html[data-theme="dark"] .container { background:#192630; box-shadow:0 0 28px rgba(0,0,0,.35); }
+html[data-theme="dark"] .section-label, html[data-theme="dark"] h1 { color:var(--primary-color); }
+html[data-theme="dark"] .bank-picker-menu { background:#1b2b35; border-color:#36515f; }
+html[data-theme="dark"] .bank-category { background:#21333e; border-color:#3b5867; }
+html[data-theme="dark"] .bank-category-header { color:#d8eaf7; }
+html[data-theme="dark"] .bank-option { color:#e7eef2; }
+html[data-theme="dark"] .bank-option:hover { background:#2a4654; }
+html[data-theme="dark"] .selection-summary { background:#223945; border-color:#36515f; color:#d8eaf7; }
+html[data-theme="dark"] .question-card, html[data-theme="dark"] .stats-card { background:#21333e; border-color:#3b5867; color:#e7eef2; }
+html[data-theme="dark"] .question-title { color:#f3f7f9; }
+html[data-theme="dark"] .option-btn { background:linear-gradient(135deg,#263b47,#1e303a); color:#e7eef2; border-color:#47616e; }
+html[data-theme="dark"] .option-btn:hover:not(:disabled) { background:#294b5c; border-color:#6db8dc; }
+html[data-theme="dark"] select, html[data-theme="dark"] input { background:#21333e; color:#e7eef2; border-color:#47616e; }
+html[data-theme="dark"] .drone-random-controls { background:#3b3420; border-color:#8c7428; }
+html[data-theme="dark"] .drone-random-note { color:#f0d878; }
+html[data-theme="dark"] .custom-controls, html[data-theme="dark"] #customResultControls { color:#d8eaf7; }
+
+@media (max-width:560px) {
+  .quiz-action-panel { grid-template-columns:1fr; }
+  .theme-toggle { font-size:.78rem; padding:7px 10px; }
+}
+
+
+/* 深色模式相容備援：同時支援 html 屬性與 body class */
+body.dark-mode { background:#0f171d; color:#e7eef2; }
+body.dark-mode .container { background:#192630; box-shadow:0 0 28px rgba(0,0,0,.35); }
+body.dark-mode .section-label, body.dark-mode h1 { color:#d8eaf7; }
+body.dark-mode .bank-picker-menu { background:#1b2b35; border-color:#36515f; }
+body.dark-mode .bank-category { background:#21333e; border-color:#3b5867; }
+body.dark-mode .bank-category-header, body.dark-mode .bank-option { color:#e7eef2; }
+body.dark-mode .selection-summary { background:#223945; border-color:#36515f; color:#d8eaf7; }
+body.dark-mode .question-card, body.dark-mode .stats-card { background:#21333e; border-color:#3b5867; color:#e7eef2; }
+body.dark-mode .question-title { color:#f3f7f9; }
+body.dark-mode .option-btn { background:linear-gradient(135deg,#263b47,#1e303a); color:#e7eef2; border-color:#47616e; }
+body.dark-mode select, body.dark-mode input { background:#21333e; color:#e7eef2; border-color:#47616e; }
+body.dark-mode .brand-subtitle { color:#c5dfed; }
+body.dark-mode .bank-menu-hint { color:#b9cbd4; }
+body.dark-mode .stats-main { color:#e7eef2; }
+body.dark-mode .progress-track { background:#344d5a; }
+body.dark-mode .feedback { color:#1b252b; }
+
+
+.theme-fab { display:flex; position:fixed; right:16px; bottom:18px; z-index:40; width:48px; height:48px; padding:0; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.35); border-radius:50%; background:#083b63; color:#fff; font-size:1.25rem; box-shadow:0 5px 16px rgba(0,0,0,.25); }
+.theme-fab:hover:not(:disabled) { transform:translateY(-2px); }
+html[data-theme="dark"] .theme-fab, body.dark-mode .theme-fab { background:#e0b83f; color:#17232b; }
+@media (min-width:700px) { .theme-fab { display:none; } }
+
+
+.section-heading-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.section-heading-row .section-label { margin:0; }
+.theme-mobile-toggle { display:inline-flex; align-items:center; justify-content:center; width:auto; min-height:38px; padding:8px 12px; border:1px solid var(--line-blue); border-radius:999px; background:var(--soft-blue); color:var(--primary-color); font-size:.82rem; white-space:nowrap; }
+.theme-mobile-toggle:hover:not(:disabled) { transform:none; box-shadow:none; }
+html[data-theme="dark"] .theme-mobile-toggle, body.dark-mode .theme-mobile-toggle { background:#2d4b59; border-color:#6a8794; color:#f2d36b; }
+
+@media (max-width:420px) { .section-heading-row { align-items:flex-start; } .theme-mobile-toggle { font-size:.75rem; padding:7px 9px; } }
+
 </style>
 </head>
 <body>
@@ -526,23 +819,39 @@ flex: 1;
 <div id="celebrationLayer" aria-hidden="true"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
+
 <div class="container">
 <div class="brand-header">
+<div class="brand-topline"><span class="brand-mark">⚓</span></div>
 <h1>海巡法規與勤務線上測驗</h1>
 <div class="brand-subtitle">COAST GUARD TRAINING · 法規與勤務學習平台</div>
 </div>
 
 <div id="selectionArea">
 <div class="control-panel">
-<div class="section-label">選擇作答範圍（可選單一章節、複選章節或全部題庫）</div>
+<div class="section-heading-row"><div class="section-label">選擇作答範圍</div><button id="themeMobileToggle" class="theme-mobile-toggle theme-control" type="button" onclick="toggleTheme()" aria-label="切換深色模式">☾ 深色模式</button></div>
+<button id="bankMenuToggle" class="bank-menu-toggle" type="button" onclick="toggleBankMenu()" aria-expanded="false" aria-controls="bankPickerMenu">
+<span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+<span class="bank-menu-label">開啟題庫選單</span>
+</button>
+<div id="bankPickerMenu" class="bank-picker-menu">
+<p class="bank-menu-hint">可選擇單一章節、複選章節或整類題庫；選好後可關閉選單。</p>
 <div id="bankPicker" class="bank-picker"></div>
+</div>
+<div id="droneRandomControls" class="drone-random-controls" aria-live="polite">
+<div class="drone-random-row"><label for="droneQuestionCount">無人機隨機抽題數</label><input id="droneQuestionCount" type="number" min="1" value="20" oninput="updateDroneQuestionControls()"><span>題</span></div>
+<div id="droneRandomNote" class="drone-random-note"></div>
+</div>
 <div class="selection-actions">
 <button onclick="selectCategoryBanks('midterm')">全選期中考範圍</button>
 <button onclick="selectCategoryBanks('drone')">全選無人機範圍</button>
 <button onclick="clearBankSelection()">清除選擇</button>
 </div>
-<button onclick="shuffleAndReset()">🔀 隨機抽題</button>
+<div id="selectionSummary" class="selection-summary" aria-live="polite">尚未選擇題庫</div>
+<div id="quizActionPanel" class="quiz-action-panel" hidden>
+<button class="random-btn" onclick="shuffleAndReset()">🔀 隨機抽題</button>
 <button class="start-btn" onclick="beginSelectedQuiz()">⚓ 開始作答</button>
+</div>
 </div>
 </div>
 
@@ -866,7 +1175,7 @@ const questionCategories = {
   drone: { name: "無人機考試｜遙控無人機專業操作證", keys: Object.keys(questionBank).filter(key => key.startsWith("drone")) }
 };
 
-let selectedBankKeys = new Set(["bank1"]);
+let selectedBankKeys = new Set();
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
@@ -879,9 +1188,82 @@ if (!currentQuestions.length) {
 showToast("請至少選擇一個題庫，再開始作答。");
 return;
 }
+if (isDroneOnlySelection()) applyDroneRandomCount();
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
+renderQuestion();
 window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function toggleBankMenu(force) {
+const menu = document.getElementById("bankPickerMenu");
+const button = document.getElementById("bankMenuToggle");
+if (!menu || !button) return;
+const shouldOpen = typeof force === "boolean" ? force : !menu.classList.contains("open");
+menu.classList.toggle("open", shouldOpen);
+button.setAttribute("aria-expanded", String(shouldOpen));
+button.querySelector(".bank-menu-label").textContent = shouldOpen ? "關閉題庫選單" : "開啟題庫選單";
+}
+
+function isDroneOnlySelection() {
+const keys = [...selectedBankKeys];
+return keys.length > 0 && keys.every(key => questionCategories.drone.keys.includes(key));
+}
+
+function updateDroneQuestionControls() {
+const panel = document.getElementById("droneRandomControls");
+if (!panel) return;
+const visible = isDroneOnlySelection();
+panel.classList.toggle("visible", visible);
+if (!visible) return;
+const available = [...selectedBankKeys].reduce((total, key) => total + (questionBank[key]?.questions.length || 0), 0);
+const input = document.getElementById("droneQuestionCount");
+input.max = available;
+if (!Number.isFinite(Number(input.value)) || Number(input.value) < 1) input.value = Math.min(20, available);
+if (Number(input.value) > available) input.value = available;
+document.getElementById("droneRandomNote").textContent = `目前選取章節共有 ${available} 題，開始作答時將隨機抽出指定題數。`;
+}
+
+function applyDroneRandomCount() {
+const available = currentQuestions.length;
+const input = document.getElementById("droneQuestionCount");
+let count = Math.floor(Number(input?.value));
+if (!Number.isFinite(count) || count < 1) count = Math.min(20, available);
+count = Math.min(count, available);
+if (input) input.value = count;
+currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5).slice(0, count);
+}
+
+function updateSelectionUI() {
+const summary = document.getElementById("selectionSummary");
+const actionPanel = document.getElementById("quizActionPanel");
+if (!summary || !actionPanel) return;
+const count = selectedBankKeys.size;
+const total = [...selectedBankKeys].reduce((sum, key) => sum + (questionBank[key]?.questions.length || 0), 0);
+summary.textContent = count ? `已選擇 ${count} 個題庫，共 ${total} 題` : "尚未選擇題庫";
+actionPanel.hidden = count === 0;
+}
+
+function getSavedTheme() {
+try { return localStorage.getItem("coastGuardTheme") || "light"; }
+catch (error) { return document.documentElement.dataset.theme || "light"; }
+}
+function applySavedTheme() {
+const theme = getSavedTheme() === "dark" ? "dark" : "light";
+document.documentElement.dataset.theme = theme;
+document.body.classList.toggle("dark-mode", theme === "dark");
+document.querySelectorAll(".theme-control").forEach(button => {
+  if (button.id === "themeFab") button.textContent = theme === "dark" ? "☀" : "☾";
+  else button.textContent = theme === "dark" ? "☀️ 淺色模式" : "☾ 深色模式";
+  button.setAttribute("aria-pressed", String(theme === "dark"));
+});
+}
+function toggleTheme() {
+const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+try { localStorage.setItem("coastGuardTheme", next); } catch (error) {}
+document.documentElement.dataset.theme = next;
+document.body.classList.toggle("dark-mode", next === "dark");
+applySavedTheme();
 }
 
 // 初始化題庫選擇器
@@ -922,8 +1304,9 @@ for (const categoryKey of Object.keys(questionCategories)) {
   picker.appendChild(group);
 }
 startSelectedBanks();
+updateDroneQuestionControls();
+updateSelectionUI();
 }
-
 function updateSelectedBanks() {
 const checked = [...document.querySelectorAll("#bankPicker input:checked")];
 const checkedCategories = Object.keys(questionCategories).filter(categoryKey =>
@@ -937,20 +1320,22 @@ if (checkedCategories.length > 1) {
   });
 }
 selectedBankKeys = new Set([...document.querySelectorAll("#bankPicker input:checked")].map(input => input.value));
+updateDroneQuestionControls();
+updateSelectionUI();
 }
-
 function selectCategoryBanks(categoryKey) {
 const category = questionCategories[categoryKey];
 if (!category) return;
 const categoryKeys = new Set(category.keys);
-// 期中考與無人機考試範圍互斥，選取一類時自動取消另一類。
 document.querySelectorAll("#bankPicker input").forEach(input => {
   input.checked = categoryKeys.has(input.value);
 });
 selectedBankKeys = new Set(category.keys);
 startSelectedBanks();
+updateDroneQuestionControls();
+updateSelectionUI();
+toggleBankMenu(false);
 }
-
 function clearBankSelection() {
 document.querySelectorAll("#bankPicker input").forEach(input => input.checked = false);
 selectedBankKeys.clear();
@@ -958,9 +1343,10 @@ currentQuestions = [];
 currentIndex = 0;
 score = 0;
 userAnswers = {};
+updateDroneQuestionControls();
+updateSelectionUI();
 renderQuestion();
 }
-
 // 載入所選的一個或多個題庫
 function startSelectedBanks() {
 updateSelectedBanks();
@@ -974,17 +1360,19 @@ document.getElementById("quizArea").style.display = "none";
 document.getElementById("resultArea").style.display = "none";
 renderQuestion();
 }
-
-// 隨機抽題並重置
+// 隨機抽題並重置；無人機題庫會依使用者指定題數抽取
 function shuffleAndReset() {
 startSelectedBanks();
-if (!currentQuestions.length) return;
-currentQuestions.sort(() => Math.random() - 0.5);
+if (!currentQuestions.length) {
+showToast("請至少選擇一個題庫。");
+return;
+}
+if (isDroneOnlySelection()) applyDroneRandomCount();
+else currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5);
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 renderQuestion();
 }
-
 let toastTimer;
 
 function showToast(message) {
@@ -1197,8 +1585,9 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
 
 // 使用相容性更好的 DOMContentLoaded 事件
 if (document.readyState === "loading") {
-document.addEventListener("DOMContentLoaded", initSelect);
+document.addEventListener("DOMContentLoaded", () => { applySavedTheme(); initSelect(); });
 } else {
+applySavedTheme();
 initSelect();
 }
 </script>
