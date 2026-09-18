@@ -812,6 +812,10 @@ html[data-theme="dark"] .theme-mobile-toggle, body.dark-mode .theme-mobile-toggl
 
 @media (max-width:420px) { .section-heading-row { align-items:flex-start; } .theme-mobile-toggle { font-size:.75rem; padding:7px 9px; } }
 
+
+.drone-reset-btn { width:auto; min-height:36px; padding:7px 11px; background:#8b6b27; color:#fff; font-size:.78rem; }
+html[data-theme="dark"] .drone-reset-btn, body.dark-mode .drone-reset-btn { background:#b38b32; color:#17232b; }
+
 </style>
 </head>
 <body>
@@ -839,7 +843,7 @@ html[data-theme="dark"] .theme-mobile-toggle, body.dark-mode .theme-mobile-toggl
 <div id="bankPicker" class="bank-picker"></div>
 </div>
 <div id="droneRandomControls" class="drone-random-controls" aria-live="polite">
-<div class="drone-random-row"><label for="droneQuestionCount">無人機隨機抽題數</label><input id="droneQuestionCount" type="number" min="1" value="20" oninput="updateDroneQuestionControls()"><span>題</span></div>
+<div class="drone-random-row"><label for="droneQuestionCount">無人機隨機抽題數</label><input id="droneQuestionCount" type="number" min="1" value="" placeholder="請輸入" oninput="updateDroneQuestionControls()"><span>題</span><button type="button" class="drone-reset-btn" onclick="resetDroneQuestionPool()">重新開始抽題</button></div>
 <div id="droneRandomNote" class="drone-random-note"></div>
 </div>
 <div class="selection-actions">
@@ -1188,7 +1192,7 @@ if (!currentQuestions.length) {
 showToast("請至少選擇一個題庫，再開始作答。");
 return;
 }
-if (isDroneOnlySelection()) applyDroneRandomCount();
+if (isDroneOnlySelection() && !applyDroneRandomCount()) return;
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 renderQuestion();
@@ -1210,28 +1214,76 @@ const keys = [...selectedBankKeys];
 return keys.length > 0 && keys.every(key => questionCategories.drone.keys.includes(key));
 }
 
+const droneUsedStorageKey = "coastGuardDroneUsedQuestions";
+function droneSelectionKey() {
+return [...selectedBankKeys].filter(key => questionCategories.drone.keys.includes(key)).sort().join("|");
+}
+function readDroneUsedMap() {
+try { return JSON.parse(localStorage.getItem(droneUsedStorageKey) || "{}"); }
+catch (error) { return {}; }
+}
+function writeDroneUsedMap(map) {
+try { localStorage.setItem(droneUsedStorageKey, JSON.stringify(map)); } catch (error) {}
+}
+function getDroneUsedIds() {
+const key = droneSelectionKey();
+if (!key) return new Set();
+const map = readDroneUsedMap();
+return new Set(Array.isArray(map[key]) ? map[key] : []);
+}
+function markDroneUsed(ids) {
+const key = droneSelectionKey();
+if (!key) return;
+const map = readDroneUsedMap();
+const idsSet = new Set(Array.isArray(map[key]) ? map[key] : []);
+ids.forEach(id => idsSet.add(id));
+map[key] = Array.from(idsSet);
+writeDroneUsedMap(map);
+}
+function resetDroneQuestionPool() {
+const key = droneSelectionKey();
+if (!key) return;
+const map = readDroneUsedMap();
+delete map[key];
+writeDroneUsedMap(map);
+updateDroneQuestionControls();
+showToast("已重新開始抽題，所有無人機題目都可再次抽出。");
+}
+
 function updateDroneQuestionControls() {
 const panel = document.getElementById("droneRandomControls");
 if (!panel) return;
 const visible = isDroneOnlySelection();
 panel.classList.toggle("visible", visible);
 if (!visible) return;
-const available = [...selectedBankKeys].reduce((total, key) => total + (questionBank[key]?.questions.length || 0), 0);
+const allAvailable = [...selectedBankKeys].reduce((total, key) => total + (questionBank[key]?.questions.length || 0), 0);
+const used = getDroneUsedIds();
+const available = Math.max(0, allAvailable - used.size);
 const input = document.getElementById("droneQuestionCount");
-input.max = available;
-if (!Number.isFinite(Number(input.value)) || Number(input.value) < 1) input.value = Math.min(20, available);
-if (Number(input.value) > available) input.value = available;
-document.getElementById("droneRandomNote").textContent = `目前選取章節共有 ${available} 題，開始作答時將隨機抽出指定題數。`;
+input.max = Math.max(1, available);
+const entered = input.value.trim();
+if (entered !== "" && Number(input.value) > available && available > 0) input.value = available;
+if (entered !== "" && (!Number.isFinite(Number(input.value)) || Number(input.value) < 1)) input.value = "";
+document.getElementById("droneRandomNote").textContent = available > 0 ? `尚有 ${available} / ${allAvailable} 題未抽過，請輸入要隨機抽出的題數。` : "本組題庫已全部抽過，開始抽題時會自動重新開始。";
 }
 
 function applyDroneRandomCount() {
-const available = currentQuestions.length;
 const input = document.getElementById("droneQuestionCount");
-let count = Math.floor(Number(input?.value));
-if (!Number.isFinite(count) || count < 1) count = Math.min(20, available);
-count = Math.min(count, available);
-if (input) input.value = count;
-currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5).slice(0, count);
+const raw = input?.value?.trim() || "";
+let pool = currentQuestions.filter(question => !getDroneUsedIds().has(question.id));
+if (!pool.length) {
+  resetDroneQuestionPool();
+  pool = [...currentQuestions];
+}
+const count = Math.floor(Number(raw));
+if (!raw || !Number.isFinite(count) || count < 1 || count > pool.length) {
+  showToast(`請輸入 1 至 ${pool.length} 題。`);
+  if (input) input.focus();
+  return false;
+}
+currentQuestions = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
+markDroneUsed(currentQuestions.map(question => question.id));
+return true;
 }
 
 function updateSelectionUI() {
@@ -1367,8 +1419,8 @@ if (!currentQuestions.length) {
 showToast("請至少選擇一個題庫。");
 return;
 }
-if (isDroneOnlySelection()) applyDroneRandomCount();
-else currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5);
+if (isDroneOnlySelection() && !applyDroneRandomCount()) return;
+else if (!isDroneOnlySelection()) currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5);
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 renderQuestion();
@@ -1434,6 +1486,8 @@ optionsContainer.innerHTML = "";
 const feedback = document.getElementById("feedback");
 feedback.style.display = "none";
 feedback.className = "result-feedback";
+// 每次重新渲染題目都清空舊提示與操作按鈕，避免錯題練習時重複累加。
+feedback.innerHTML = "";
 
 const hasAnswered = Object.prototype.hasOwnProperty.call(userAnswers, currentIndex);
 
@@ -1690,7 +1744,12 @@ initSelect();
   window.practiceCustomMistakeSet = function () {
     var set = getSet();
     if (!set) { document.getElementById('customSetNotice').textContent = '請先選擇自己的錯題庫。'; return; }
-    var qs = set.questionIds.map(questionById).filter(Boolean);
+    var uniqueIds = Array.from(new Set(set.questionIds || []));
+    if (uniqueIds.length !== (set.questionIds || []).length) {
+      set.questionIds = uniqueIds;
+      saveSets();
+    }
+    var qs = uniqueIds.map(questionById).filter(Boolean);
     if (!qs.length) { document.getElementById('customSetNotice').textContent = '這個錯題庫目前沒有題目。'; return; }
     currentQuestions = qs; currentIndex = 0; score = 0; userAnswers = {}; quizMode = 'custom';
     document.getElementById('selectionArea').style.display = 'none'; document.getElementById('resultArea').style.display = 'none'; document.getElementById('quizArea').style.display = 'block'; renderQuestion();
