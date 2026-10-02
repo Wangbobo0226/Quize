@@ -1193,6 +1193,7 @@ showToast("請至少選擇一個題庫，再開始作答。");
 return;
 }
 if (isDroneOnlySelection() && !applyDroneRandomCount()) return;
+currentQuestions = shuffleQuestionOptions(currentQuestions);
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 renderQuestion();
@@ -1413,6 +1414,22 @@ document.getElementById("resultArea").style.display = "none";
 renderQuestion();
 }
 // 隨機抽題並重置；無人機題庫會依使用者指定題數抽取
+// 每次開始作答時，隨機打亂每題選項順序（「以上皆是／以上皆非」等選項固定在最後）
+function shuffleQuestionOptions(list) {
+return list.map(q => {
+const pinnedRe = /^以上(皆|都|全)/;
+const items = q.options.map((text, i) => ({ text, correct: q.answer.includes(i) }));
+const free = items.filter(o => !pinnedRe.test(o.text));
+const pinned = items.filter(o => pinnedRe.test(o.text));
+for (let i = free.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[free[i], free[j]] = [free[j], free[i]];
+}
+const merged = [...free, ...pinned];
+return { ...q, options: merged.map(o => o.text), answer: merged.map((o, i) => o.correct ? i : -1).filter(i => i >= 0) };
+});
+}
+
 function shuffleAndReset() {
 startSelectedBanks();
 if (!currentQuestions.length) {
@@ -1421,6 +1438,7 @@ return;
 }
 if (isDroneOnlySelection() && !applyDroneRandomCount()) return;
 else if (!isDroneOnlySelection()) currentQuestions = [...currentQuestions].sort(() => Math.random() - 0.5);
+currentQuestions = shuffleQuestionOptions(currentQuestions);
 document.getElementById("selectionArea").style.display = "none";
 document.getElementById("quizArea").style.display = "block";
 renderQuestion();
@@ -1605,7 +1623,7 @@ window.scrollTo({ top: 0, behavior: "smooth" });
 
 function retryWrongQuestions() {
 if (!wrongQuestions.length) return;
-currentQuestions = [...wrongQuestions];
+currentQuestions = shuffleQuestionOptions([...wrongQuestions]);
 currentIndex = 0;
 score = 0;
 userAnswers = {};
@@ -1751,7 +1769,7 @@ initSelect();
     }
     var qs = uniqueIds.map(questionById).filter(Boolean);
     if (!qs.length) { document.getElementById('customSetNotice').textContent = '這個錯題庫目前沒有題目。'; return; }
-    currentQuestions = qs; currentIndex = 0; score = 0; userAnswers = {}; quizMode = 'custom';
+    currentQuestions = shuffleQuestionOptions(qs); currentIndex = 0; score = 0; userAnswers = {}; quizMode = 'custom';
     document.getElementById('selectionArea').style.display = 'none'; document.getElementById('resultArea').style.display = 'none'; document.getElementById('quizArea').style.display = 'block'; renderQuestion();
   };
   function addPanels() {
